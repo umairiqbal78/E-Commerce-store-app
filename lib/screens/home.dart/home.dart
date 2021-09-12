@@ -12,8 +12,7 @@ class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return Scaffold(appBar: AppBar(
         title: Text('Home'),
         actions: [
           TextButton.icon(
@@ -24,13 +23,6 @@ class _HomeState extends State<Home> {
               label: Text("Sign Out")),
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            child: Text('Container'),
-          ),
-        ],
-      ),
-    );
+        body: Container());
   }
 }
