@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1091567789163",
+    "project_id": "stop-shop-5997b",
+    "storage_bucket": "stop-shop-5997b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091567789163:android:a8010f0fdb5c09a8a07d2e",
+        "android_client_info": {
+          "package_name": "com.example.stop_shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091567789163-aoik726qia5s6ag4mufcrjk0maictiln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu6_Pr1iIejqiF2smrrB--rOHnokuet8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091567789163-aoik726qia5s6ag4mufcrjk0maictiln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
