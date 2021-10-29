@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:stop_shop/screens/product_card.dart';
 import 'package:stop_shop/screens/services/api.dart';
 
 import 'package:stop_shop/screens/services/auth.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -41,35 +43,52 @@ class _HomeState extends State<Home> {
           ],
         ),
         body: Container(
-          padding: EdgeInsets.all(20.0),
-          child: data.isEmpty
-              ? Center(child: CircularProgressIndicator())
-              : ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) =>
-                      Divider(color: Colors.grey[900]),
-                  itemCount: data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var listdata = data[index];
-                    if (listdata.isEmpty) {
-                      return Center(child: CircularProgressIndicator());
-                    } else {
-                      return ListTile(
-                        title: Text(listdata.isEmpty ? '' : listdata['title']),
-                        subtitle:
-                            Text(listdata.isEmpty ? '' : listdata['category']),
-                        leading: SizedBox(
-                            height: 50,
-                            width: 70,
-                            child: Image.network(listdata.isEmpty
-                                ? ''
-                                : listdata['image'].toString())),
-                        trailing: Text(listdata.isEmpty
-                            ? ''
-                            : listdata['price'].toString()),
-                      );
-                    }
-                  },
-                ),
-        ));
+            padding: EdgeInsets.all(20.0),
+            child: data.isEmpty
+                ? Center(child: CircularProgressIndicator())
+                : new StaggeredGridView.countBuilder(
+                    crossAxisCount: 4,
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) =>
+                        ProductCard(data: data[index]),
+                    staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+                    mainAxisSpacing: 4.0,
+                    crossAxisSpacing: 4.0,
+                  )
+            // : ListView.separated(
+            //     separatorBuilder: (BuildContext context, int index) =>
+            //         Divider(color: Colors.grey[900]),
+            //     itemCount: data.length,
+            //     itemBuilder: (BuildContext context, int index) {
+            //       var listdata = data[index];
+            //       if (listdata.isEmpty) {
+            //         return Column(
+            //             crossAxisAlignment: CrossAxisAlignment.center,
+            //             mainAxisAlignment: MainAxisAlignment.center,
+            //             children: [
+            //               SizedBox(
+            //                 height: 200,
+            //               ),
+            //               CircularProgressIndicator()
+            //             ]);
+            //       } else {
+            //         return ListTile(
+            //           title: Text(listdata.isEmpty ? '' : listdata['title']),
+            //           subtitle:
+            //               Text(listdata.isEmpty ? '' : listdata['category']),
+            //           leading: SizedBox(
+            //               height: 50,
+            //               width: 70,
+            //               child: Image.network(listdata.isEmpty
+            //                   ? ''
+            //                   : listdata['image'].toString())),
+            //           trailing: Text(listdata.isEmpty
+            //               ? ''
+            //               : listdata['price'].toString()),
+            //         );
+            //       }
+            //     },
+            //   ),
+            ));
   }
 }
