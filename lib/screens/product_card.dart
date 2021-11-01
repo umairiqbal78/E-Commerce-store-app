@@ -28,7 +28,6 @@ class ProductCard extends StatelessWidget {
     if (data['category'] != null) {
       return Text(
         data['category'],
-        
       );
     } else {
       return Text('Category not Found');
@@ -46,40 +45,58 @@ class ProductCard extends StatelessWidget {
     }
   }
 
+  Widget _buildCountWidget() {
+    if (data['rating'] != null) {
+      return Text(
+        "Available:  " + data['rating']['count'].toString(),
+      );
+    } else {
+      return Text('Rating not Found');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return 
-    GestureDetector(
-      onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>  Product(data: data)),
-            ),
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-              child: _buildImageWidget(),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-              child: _buildTitleWidget(),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-              child: _buildCategoryWidget(),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
-              child: _buildPriceWidget(),
-            )
-          ],
-        ),
-      ),
-    );
+    return Container(
+        child: data.isEmpty
+            ? Center(child: CircularProgressIndicator())
+            : GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Product(data: data)),
+                ),
+                child: Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 0.0),
+                        child: _buildImageWidget(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 2.0),
+                        child: _buildTitleWidget(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 2.0),
+                        child: _buildCategoryWidget(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 2.0),
+                        child: _buildCountWidget(),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 10.0),
+                        child: _buildPriceWidget(),
+                      )
+                    ],
+                  ),
+                ),
+              ));
   }
 }

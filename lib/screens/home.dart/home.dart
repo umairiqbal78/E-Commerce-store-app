@@ -32,13 +32,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-    color: Colors.black, //change your color here
-  ),
-        title: Text(
-          'Home',
-          style: TextStyle(color: Colors.black, fontSize: 25),
-        ),
+        leading: BackButton(color: Colors.black),
+        backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
         actions: [
@@ -46,8 +41,11 @@ class _HomeState extends State<Home> {
               onPressed: () async {
                 await _auth.signOut();
               },
-              icon: Icon(Icons.person, color: Colors.black,),
-              label: Text("Sign Out", style: TextStyle(color: Colors.black))),
+              icon: Icon(
+                Icons.person,
+                color: Colors.black,
+              ),
+              label: Text("", style: TextStyle(color: Colors.black))),
         ],
       ),
       body: Container(
@@ -60,11 +58,11 @@ class _HomeState extends State<Home> {
                   crossAxisCount: 4,
                   itemCount: data.length,
                   itemBuilder: (BuildContext context, int index) =>
+                  
                       ProductCard(data: data[index]),
                   staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
                   mainAxisSpacing: 20.0,
                   crossAxisSpacing: 9.0,
-                
                 )),
 
       // : ListView.separated(

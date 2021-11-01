@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:stop_shop/screens/services/auth.dart';
 
 class Product extends StatelessWidget {
@@ -9,13 +10,8 @@ class Product extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          title: Text(
-            'Home',
-            style: TextStyle(color: Colors.black, fontSize: 25),
-          ),
+          leading: BackButton(color: Colors.black),
+          backgroundColor: Colors.transparent,
           centerTitle: true,
           elevation: 0,
           actions: [
@@ -27,7 +23,7 @@ class Product extends StatelessWidget {
                   Icons.person,
                   color: Colors.black,
                 ),
-                label: Text("Sign Out", style: TextStyle(color: Colors.black))),
+                label: Text("", style: TextStyle(color: Colors.black))),
           ],
         ),
         body: Padding(
@@ -65,11 +61,26 @@ class Product extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(height: 5.0),
                       Text(data["description"]),
-                      SizedBox(height: 5.0),
-                      Text(
-                        "\$" + data['price'].toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.0),
+                      SizedBox(height: 10.0),
+                      Row(
+                        children: [
+                          Text(
+                            "\$" + data['price'].toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20.0),
+                          ),
+                          SizedBox(width: 100.0,),
+                          RatingBarIndicator(
+                            rating: data['rating']['rate'],
+                            itemBuilder: (context, index) => Icon(
+                              Icons.star,
+                              color: Colors.black,
+                            ),
+                            itemCount: 5,
+                            itemSize: 20.0,
+                            direction: Axis.horizontal,
+                          ),
+                        ],
                       ),
                     ]),
               ),
