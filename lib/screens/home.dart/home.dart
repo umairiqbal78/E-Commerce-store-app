@@ -1,6 +1,8 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:stop_shop/screens/likedItems.dart';
 import 'package:stop_shop/screens/product_card.dart';
 import 'package:stop_shop/screens/services/api.dart';
 
@@ -31,21 +33,100 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Drawer(
+          backgroundColor: Colors.black,
+          child: ListView(
+            children: [
+              DrawerHeader(
+                child: Text(
+                  "Umair Iqbal",
+                  style: TextStyle(fontSize: 30, color: Colors.white),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'HOME',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              ListTile(
+                title: Text('LIKED PRODUCTS',
+                    style: TextStyle(color: Colors.white)),
+              ),
+              ListTile(
+                title: Text('ABOUT', style: TextStyle(color: Colors.white)),
+              ),
+              ListTile(
+                title: Text('CONTACT'),
+              ),
+            ],
+          ),
+        ),
+      ),
       appBar: AppBar(
-        leading: BackButton(color: Colors.black),
-        backgroundColor: Colors.transparent,
+        title: Text(
+          "PRODUCTS",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        leading: BackButton(color: Colors.white),
+        backgroundColor: Colors.grey[900],
         centerTitle: true,
         elevation: 0,
         actions: [
-          TextButton.icon(
-              onPressed: () async {
-                await _auth.signOut();
-              },
-              icon: Icon(
-                Icons.person,
-                color: Colors.black,
-              ),
-              label: Text("", style: TextStyle(color: Colors.black))),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => likedItems()),
+              );
+            },
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              // await _auth.signOut();
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Confirmation."),
+                      content: Text("Do you want to Sign Out"),
+                      actions: <Widget>[
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.grey),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("Cancel"),
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
+                          ),
+                          onPressed: () async {
+                            await _auth.signOut();
+                            Navigator.pop(context);
+                          },
+                          child: Text("Sign Out"),
+                        ),
+                      ],
+                    );
+                  });
+            },
+            icon: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
       body: Container(
@@ -58,7 +139,6 @@ class _HomeState extends State<Home> {
                   crossAxisCount: 4,
                   itemCount: data.length,
                   itemBuilder: (BuildContext context, int index) =>
-                  
                       ProductCard(data: data[index]),
                   staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
                   mainAxisSpacing: 20.0,

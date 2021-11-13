@@ -17,8 +17,11 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
   String email = '';
+  String username = '';
   String password = '';
   String error = '';
+  bool obscureText = true;
+  bool iconToggle = true;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -45,6 +48,36 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             height: 20.0,
                           ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  "Sign Up",
+                                  style: TextStyle(
+                                      fontSize: 35.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15.0,
+                          ),
+                          TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                                label: Text('Username')),
+                            onChanged: (val) {
+                              setState(() {
+                                username = val;
+                              });
+                            },
+                            validator: (val) =>
+                                val!.isEmpty ? 'Enter an username' : null,
+                          ),
+                          SizedBox(height: 10.0),
                           TextFormField(
                             decoration: textInputDecoration,
                             onChanged: (val) {
@@ -58,13 +91,28 @@ class _RegisterState extends State<Register> {
                           SizedBox(height: 10.0),
                           TextFormField(
                             decoration: textInputDecoration.copyWith(
-                                hintText: 'Password'),
+                              suffixIcon: IconButton(
+                                  focusColor: Colors.black,
+                                  hoverColor: Colors.black,
+                                  disabledColor: Colors.grey,
+                                  color: Colors.grey,
+                                  onPressed: () {
+                                    setState(() {
+                                      obscureText = !obscureText;
+                                      iconToggle = !iconToggle;
+                                    });
+                                  },
+                                  icon: Icon(iconToggle
+                                      ? Icons.visibility
+                                      : Icons.visibility_off_rounded)),
+                              label: Text('Password'),
+                            ),
                             onChanged: (val) {
                               setState(() {
                                 password = val;
                               });
                             },
-                            obscureText: true,
+                            obscureText: obscureText,
                             validator: (val) => val!.length < 6
                                 ? 'Enter atleast 6 numerics'
                                 : null,
@@ -74,17 +122,23 @@ class _RegisterState extends State<Register> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                dynamic result =
-                                    _auth.registerWithEmailandPassword(
-                                        email, password);
-                                if (result == null) {
-                                  setState(() {
-                                    error = 'Please enter valid Email';
-                                  });
-                                } else {
-                                  print('user is registered');
+                              try {
+                                if (_formKey.currentState!.validate()) {
+                                  dynamic result =
+                                      _auth.registerWithEmailandPassword(
+                                          email, password);
+
+                                  if (result == null) {
+                                    setState(() {
+                                      error =
+                                          'Please enter valid Username and Email ';
+                                    });
+                                  } else {
+                                    print('user is registered');
+                                  }
                                 }
+                              } catch (e) {
+                                print(e.toString());
                               }
                             },
                             child: Text(

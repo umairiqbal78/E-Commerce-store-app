@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stop_shop/screens/product.dart';
+import 'package:readmore/readmore.dart';
 
 class ProductCard extends StatelessWidget {
   ProductCard({this.data});

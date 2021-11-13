@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stop_shop/screens/authentication/signin.dart';
 import 'package:stop_shop/screens/services/auth.dart';
 import 'package:stop_shop/shared/constants.dart';
@@ -19,6 +20,8 @@ class _SignInState extends State<SignIn> {
   String email = '';
   String password = '';
   String error = '';
+  bool obscureText = true;
+  bool iconToggle = true;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -45,6 +48,24 @@ class _SignInState extends State<SignIn> {
                           SizedBox(
                             height: 20.0,
                           ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  "Sign In",
+                                  style: TextStyle(
+                                      fontSize: 35.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15.0,
+                          ),
                           TextFormField(
                             decoration: textInputDecoration,
                             onChanged: (val) {
@@ -58,15 +79,29 @@ class _SignInState extends State<SignIn> {
                           SizedBox(height: 10.0),
                           TextFormField(
                             decoration: textInputDecoration.copyWith(
-                                hintText: 'Password'),
+                                suffixIcon: IconButton(
+                                    focusColor: Colors.black,
+                                    hoverColor: Colors.black,
+                                    disabledColor: Colors.grey,
+                                    color: Colors.grey,
+                                    onPressed: () {
+                                      setState(() {
+                                        obscureText = !obscureText;
+                                        iconToggle = !iconToggle;
+                                      });
+                                    },
+                                    icon: Icon(iconToggle
+                                        ? Icons.visibility
+                                        : Icons.visibility_off_rounded)),
+                                label: Text('Password')),
                             onChanged: (val) {
                               setState(() {
                                 password = val;
                               });
                             },
-                            obscureText: true,
+                            obscureText: obscureText,
                             validator: (val) => val!.length < 6
-                                ? 'Enter atleast 6 nuumerics'
+                                ? 'Enter atleast 6 numerics'
                                 : null,
                           ),
                           SizedBox(
@@ -85,6 +120,18 @@ class _SignInState extends State<SignIn> {
                                   });
                                 } else {
                                   print('user is logged in');
+                                  return showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        Future.delayed(Duration(seconds: 2),
+                                            () {
+                                          Navigator.pop(context);
+                                        });
+                                        return AlertDialog(
+                                          title: Text("User Logged."),
+                                          content: Text("Welcome Back!"),
+                                        );
+                                      });
                                 }
                               }
                             },

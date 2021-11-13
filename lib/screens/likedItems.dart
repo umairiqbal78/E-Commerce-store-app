@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:stop_shop/screens/likeditemdetail.dart';
 import 'package:stop_shop/screens/product.dart';
 import 'package:stop_shop/screens/product_card.dart';
 import 'package:stop_shop/screens/services/auth.dart';
@@ -16,22 +17,51 @@ class _likedItemsState extends State<likedItems> {
 
   @override
   Widget build(BuildContext context) {
+    void _showProductDetail(Map data) {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 60.0),
+              child: LikedItemDetail(
+                data: data,
+              ),
+            );
+          });
+    }
+
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(color: Colors.black),
-          backgroundColor: Colors.transparent,
+          title: Text(
+            "MY CART",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          leading: BackButton(color: Colors.white),
+          backgroundColor: Colors.grey[900],
           centerTitle: true,
           elevation: 0,
           actions: [
-            TextButton.icon(
-                onPressed: () async {
-                  await _auth.signOut();
-                },
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.black,
-                ),
-                label: Text("", style: TextStyle(color: Colors.black))),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => likedItems()),
+                );
+              },
+              icon: Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+            ),
+            IconButton(
+              onPressed: () async {
+                await _auth.signOut();
+              },
+              icon: Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
         body: StreamBuilder<QuerySnapshot>(
@@ -51,14 +81,17 @@ class _likedItemsState extends State<likedItems> {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
                 return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Container(
+                      padding: EdgeInsets.all(4.0),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  width: 1.0,
+                                  color: Colors.black,
+                                  style: BorderStyle.solid))),
                       child: GestureDetector(
-                        onTap: () => Navigator.pop(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductCard(data: data)),
-                        ),
+                        onTap: () => _showProductDetail(data),
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
@@ -93,45 +126,6 @@ class _likedItemsState extends State<likedItems> {
                         ),
                       ),
                     ));
-                // Column(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     CircleAvatar(
-                //       radius: 40.0,
-                //       backgroundImage: NetworkImage(data['image']),
-                //     ),
-                //     SizedBox(
-                //       width: 10,
-                //     ),
-                //     ListTile(
-                //       // title: Text(data['title']),
-                //       // subtitle: Text(data['category']),
-                //       trailing: Text(data['title'] + '\n' + data['category']),
-                //     ),
-                //   ],
-                // );
-
-                //   CircleAvatar(
-                //     radius: 25.0,
-                //     backgroundImage: NetworkImage(data['image'].toString()),
-                //   ),
-                //   Text(
-                //     data['title'],
-                //     style:
-                //         TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-                //   ),
-                //   Text(
-                //     data['category'],
-                //   )
-
-                //  ListTile(
-                //   leading: CircleAvatar(
-                //     backgroundImage: NetworkImage(data['image']),
-                //   ),
-                //   title: Text(data['title'].toString()),
-                //   subtitle: Text(data['category']),
-                //   trailing: Text(data['description']),
-                // );
               }).toList(),
             );
           },
