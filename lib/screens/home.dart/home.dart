@@ -132,7 +132,10 @@ class _HomeState extends State<Home> {
       body: Container(
           padding: EdgeInsets.all(20.0),
           child: data.isEmpty
-              ? Center(child: CircularProgressIndicator())
+              ? Center(
+                  child: LinearProgressIndicator(
+                  color: Colors.black,
+                ))
               : new StaggeredGridView.countBuilder(
                   physics: AlwaysScrollableScrollPhysics(),
                   shrinkWrap: true,

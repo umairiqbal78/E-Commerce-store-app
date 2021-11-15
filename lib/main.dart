@@ -37,15 +37,20 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               title: 'E-commerce app',
               theme: ThemeData(
-                  primaryColor: Colors.grey[200],
-                  scaffoldBackgroundColor: Colors.grey[190]),
+                primaryColor: Colors.grey[200],
+                scaffoldBackgroundColor: Colors.grey[190],
+              ),
               home: Wrapper(),
             ),
           );
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
-        return Container(height: 20.0, width: 20.0);
+        return Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+          ),
+        );
       },
     );
   }

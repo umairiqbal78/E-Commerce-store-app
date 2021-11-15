@@ -35,7 +35,29 @@ class _ProductState extends State<Product> {
             'price': widget.data['price'].toString(),
           })
           .then((value) => print('product added'))
-          .catchError((error) => print('Failed to upload data: $error'));
+          .catchError(
+            (error) => print('Failed to upload data: $error'),
+          );
+    }
+
+    confirmation() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.pop(context);
+            });
+            return AlertDialog(
+              title: Center(
+                child: Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.black,
+                  size: 60.0,
+                ),
+              ),
+              content: Text("Your product is added to the Cart"),
+            );
+          });
     }
 
     return Scaffold(
@@ -94,8 +116,39 @@ class _ProductState extends State<Product> {
               ),
             ),
             IconButton(
-              onPressed: () async {
-                await _auth.signOut();
+              onPressed: () {
+                // await _auth.signOut();
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Icon(Icons.send_to_mobile_sharp),
+                        content: Text("Do you want to Sign Out"),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(Colors.grey),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("Cancel"),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                            ),
+                            onPressed: () async {
+                              await _auth.signOut();
+                              Navigator.pop(context);
+                            },
+                            child: Text("Sign Out"),
+                          ),
+                        ],
+                      );
+                    });
               },
               icon: Icon(
                 Icons.person,
@@ -194,11 +247,52 @@ class _ProductState extends State<Product> {
                               ? Icons.shopping_cart_outlined
                               : Icons.shopping_cart),
                           onPressed: () {
-                            addProduct();
                             setState(() {
                               selected_cart = !selected_cart;
                               likedItem = widget.data;
                               print(likedItem);
+                              if (!selected_cart) {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("Confirmation."),
+                                        content:
+                                            Text("Do you want to Add to cart?"),
+                                        actions: <Widget>[
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                      Color>(Colors.grey),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                selected_cart = !selected_cart;
+                                              });
+
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("Cancel"),
+                                          ),
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                      Color>(Colors.black),
+                                            ),
+                                            onPressed: () {
+                                              addProduct();
+
+                                              Navigator.pop(context);
+                                              confirmation();
+                                            },
+                                            child: Text("Add to Cart"),
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              }
                             });
                           },
                         ),

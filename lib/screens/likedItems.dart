@@ -54,8 +54,39 @@ class _likedItemsState extends State<likedItems> {
               ),
             ),
             IconButton(
-              onPressed: () async {
-                await _auth.signOut();
+              onPressed: () {
+                // await _auth.signOut();
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Confirmation."),
+                        content: Text("Do you want to Sign Out"),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(Colors.grey),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("Cancel"),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                            ),
+                            onPressed: () async {
+                              await _auth.signOut();
+                              Navigator.pop(context);
+                            },
+                            child: Text("Sign Out"),
+                          ),
+                        ],
+                      );
+                    });
               },
               icon: Icon(
                 Icons.person,
@@ -88,7 +119,7 @@ class _likedItemsState extends State<likedItems> {
                           border: Border(
                               bottom: BorderSide(
                                   width: 1.0,
-                                  color: Colors.black,
+                                  color: Colors.black38,
                                   style: BorderStyle.solid))),
                       child: GestureDetector(
                         onTap: () => _showProductDetail(data),

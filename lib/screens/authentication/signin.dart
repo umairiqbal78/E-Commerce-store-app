@@ -123,12 +123,18 @@ class _SignInState extends State<SignIn> {
                                   return showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        Future.delayed(Duration(seconds: 2),
+                                        Future.delayed(Duration(seconds: 3),
                                             () {
                                           Navigator.pop(context);
                                         });
                                         return AlertDialog(
-                                          title: Text("User Logged."),
+                                          title: Center(
+                                            child: Icon(
+                                              Icons.check_circle_rounded,
+                                              color: Colors.black,
+                                              size: 60.0,
+                                            ),
+                                          ),
                                           content: Text("Welcome Back!"),
                                         );
                                       });
