@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stop_shop/screens/authentication/signin.dart';
+import 'package:stop_shop/screens/product.dart';
 import 'package:stop_shop/screens/services/auth.dart';
 import 'package:stop_shop/shared/constants.dart';
 
@@ -17,6 +19,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
+
   String email = '';
   String password = '';
   String error = '';
@@ -113,6 +116,7 @@ class _SignInState extends State<SignIn> {
                                 dynamic result =
                                     _auth.signInwithEmailAndPassword(
                                         email, password);
+
                                 if (result == null) {
                                   setState(() {
                                     error =
@@ -120,7 +124,7 @@ class _SignInState extends State<SignIn> {
                                   });
                                 } else {
                                   print('user is logged in');
-                                  return showDialog(
+                                  showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         Future.delayed(Duration(seconds: 3),

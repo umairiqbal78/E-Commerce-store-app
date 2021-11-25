@@ -17,7 +17,7 @@ class ProductCard extends StatelessWidget {
   Widget _buildTitleWidget() {
     if (data['title'] != null) {
       return Text(
-        data['title'],
+        data['title'].toString(),
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
       );
     } else {
@@ -28,7 +28,7 @@ class ProductCard extends StatelessWidget {
   Widget _buildCategoryWidget() {
     if (data['category'] != null) {
       return Text(
-        data['category'],
+        data['category'].toString(),
       );
     } else {
       return Text('Category not Found');

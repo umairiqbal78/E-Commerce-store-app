@@ -1,10 +1,16 @@
-import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stop_shop/models/user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String get getUid {
+    return _auth.currentUser!.uid;
+  }
+
+  get curruser {
+    return _auth.currentUser;
+  }
 
   //custom user obj based on firebaseUser
   UserUid? _userFromFirebaseuser(User user) {
@@ -30,6 +36,8 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
+      // await DatabaseService(uid: user!.uid).updateUserCart('title','image','category','price');
+      // return _userFromFirebaseuser(user);
     } catch (e) {
       print(e.toString());
       return null;

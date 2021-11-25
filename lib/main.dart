@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:splash_screen_view/SplashScreenView.dart';
 import 'package:stop_shop/screens/authentication/signin.dart';
 import 'package:stop_shop/screens/likedItems.dart';
 
@@ -7,13 +8,14 @@ import 'package:stop_shop/screens/services/auth.dart';
 import 'package:stop_shop/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'models/user.dart';
+import 'package:splash_screen_view/splash_screen_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(BeforeMyApp());
 }
 
-class MyApp extends StatelessWidget {
+class BeforeMyApp extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   // This widget is the root of your application.
   @override
@@ -40,7 +42,10 @@ class MyApp extends StatelessWidget {
                 primaryColor: Colors.grey[200],
                 scaffoldBackgroundColor: Colors.grey[190],
               ),
-              home: Wrapper(),
+              home: MyApp(),
+              routes: {
+                'splashMyApp': (context) => BeforeMyApp(),
+              },
             ),
           );
         }
@@ -52,6 +57,36 @@ class MyApp extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Widget splashScreen = SplashScreenView(
+      navigateRoute: Wrapper(),
+      duration: 5000,
+      imageSize: 200,
+      imageSrc: 'assets/one-stop-shop-logos.png',
+      text: "whatever you want...",
+      textType: TextType.ColorizeAnimationText,
+      textStyle: TextStyle(
+          fontSize: 40.0, fontWeight: FontWeight.bold, fontFamily: 'cursive'),
+      colors: [
+        Colors.black,
+        Colors.black54,
+        Colors.black38,
+        Colors.black26,
+        Colors.black12,
+        Colors.black38,
+        Colors.black54,
+        Colors.black,
+      ],
+      backgroundColor: Colors.white,
+    );
+    return Scaffold(
+      body: splashScreen,
     );
   }
 }

@@ -60,12 +60,15 @@ class _LikedItemDetailState extends State<LikedItemDetail> {
                       trimCollapsedText: '...Show more',
                       trimExpandedText: ' show less',
                     ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
                     Row(
                       children: [
                         Text(
                           "\$" + widget.data['price'].toString(),
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20.0),
+                              fontWeight: FontWeight.bold, fontSize: 27.0),
                         ),
                         SizedBox(
                           width: 100.0,

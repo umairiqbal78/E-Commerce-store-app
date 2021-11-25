@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:stop_shop/screens/authentication/signin.dart';
+import 'package:stop_shop/screens/product.dart';
 import 'package:stop_shop/screens/services/auth.dart';
 import 'package:stop_shop/shared/constants.dart';
 
@@ -16,12 +18,25 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
+  CollectionReference user = FirebaseFirestore.instance.collection('user');
+  String uid() {
+    return _auth.getUid;
+  }
+
+  Future<void> addUserDetails(String username, String email) {
+    return user.doc(uid().toString()).collection('user details').add({
+      'username': username,
+      'email': email,
+    }).then((value) => print('User details added'));
+  }
+
   String email = '';
   String username = '';
   String password = '';
   String error = '';
   bool obscureText = true;
   bool iconToggle = true;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -121,7 +136,7 @@ class _RegisterState extends State<Register> {
                             height: 10.0,
                           ),
                           ElevatedButton(
-                            onPressed: () async {
+                            onPressed: () {
                               try {
                                 if (_formKey.currentState!.validate()) {
                                   dynamic result =
@@ -134,7 +149,32 @@ class _RegisterState extends State<Register> {
                                           'Please enter valid Username and Email ';
                                     });
                                   } else {
-                                    print('user is registered');
+                                    return setState(() {
+                                      _auth.registerWithEmailandPassword(
+                                          email, password);
+                                      print('user is registered');
+
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            Future.delayed(Duration(seconds: 3),
+                                                () {
+                                              addUserDetails(username, email);
+                                              Navigator.pop(context);
+                                            });
+                                            return AlertDialog(
+                                              title: Center(
+                                                child: Icon(
+                                                  Icons.check_circle_rounded,
+                                                  color: Colors.black,
+                                                  size: 60.0,
+                                                ),
+                                              ),
+                                              content: Text("Welcome! " +
+                                                  username.toUpperCase()),
+                                            );
+                                          });
+                                    });
                                   }
                                 }
                               } catch (e) {
