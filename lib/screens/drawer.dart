@@ -6,6 +6,8 @@ import 'package:stop_shop/main.dart';
 import 'package:stop_shop/screens/home.dart/home.dart';
 import 'package:stop_shop/screens/services/auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:stop_shop/shared/profilePhotoDrawer.dart';
 
 class DrawerClass extends StatefulWidget {
   const DrawerClass({Key? key}) : super(key: key);
@@ -19,24 +21,13 @@ class _DrawerClassState extends State<DrawerClass> {
   String? uid;
   String? username;
   String? email;
-
+  String? imagePath;
+  String? documentID;
   void initState() {
     super.initState();
     uid = _auth.getUid;
     getUserDetails(context);
   }
-
-  // imagePicker() async {
-  //   final ImagePicker _picker = ImagePicker();
-  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-  //   return setState(() {
-  //     if (image == null) {
-  //       print('null');
-  //     } else {
-  //       _image = File(image.path.toString());
-  //     }
-  //   });
-  // }
 
   SignOutFunction() {
     return showDialog(
@@ -95,11 +86,103 @@ class _DrawerClassState extends State<DrawerClass> {
 
   @override
   Widget build(BuildContext context) {
+    confirmation() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.pop(context);
+            });
+            return AlertDialog(
+              title: Center(
+                child: Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.black,
+                  size: 60.0,
+                ),
+              ),
+              content: Text("Image uploaded successfully!"),
+            );
+          });
+    }
+
+    String uid() {
+      return _auth.getUid;
+    }
+
+    // Future<String> get_data(DocumentReference userDoc) async {
+    //   DocumentSnapshot docSnap = await userDoc.get();
+    //   String userDetailsDocId = docSnap.reference.id;
+    //   print(userDetailsDocId);
+
+    //   var doc_id2 = docSnap.reference.id;
+    //   return doc_id2;
+    // }
+
+    dbStoringImage(String downloadedUrl) async {
+      CollectionReference user = FirebaseFirestore.instance.collection('user');
+      Future<void> userDoc = FirebaseFirestore.instance
+          .collection('user')
+          .doc(uid().toString())
+          .collection('user details')
+          .doc()
+          .update({'profile URL': downloadedUrl});
+
+      // print(userDoc);
+      // user
+      //     .doc(uid().toString())
+      //     .collection('user profile')
+      //     .doc(userDetailsDocId)
+      //     .update({'profile': downloadedUrl}).then(
+      //         (value) => print('profile picture uploaded to firestore'));
+    }
+
+    void submit() async {
+      try {
+        firebase_storage.FirebaseStorage storage =
+            firebase_storage.FirebaseStorage.instance;
+        firebase_storage.Reference ref =
+            firebase_storage.FirebaseStorage.instance.ref('/image.jpg');
+
+        File file = File(imagePath.toString());
+        await ref.putFile(file);
+        String downloadedUrl = await ref.getDownloadURL();
+
+        setState(() {
+          dbStoringImage(downloadedUrl);
+          confirmation();
+          print('file uploaded');
+        });
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+
     void getImage() async {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-      print(pickedFile!.path);
+      setState(() {
+        imagePath = pickedFile!.path;
+      });
+      submit();
+    }
+
+    imagePickerDialog() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              actions: <Widget>[
+                ElevatedButton(
+                    onPressed: () {
+                      getImage();
+                      Navigator.pop(context);
+                    },
+                    child: Text('Pick From Gallery')),
+              ],
+            );
+          });
     }
 
     return Drawer(
@@ -107,6 +190,7 @@ class _DrawerClassState extends State<DrawerClass> {
       child: ListView(
         children: [
           Container(
+            height: 225,
             color: Colors.black,
             child: DrawerHeader(
               child: Padding(
@@ -114,26 +198,27 @@ class _DrawerClassState extends State<DrawerClass> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: getImage,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 40.0,
-                        child: CircleAvatar(
-                          radius: 38.0,
-                          child: ClipOval(
-                              // child: (_image != null)
-                              //     ? Image.file(_image!)
-                              //     : Image.asset('assets/user.png'),
+                    // InkWell(
+                    //   onTap: imagePickerDialog,
+                    //   child: CircleAvatar(
+                    //     backgroundColor: Colors.black,
+                    //     radius: 40.0,
+                    //     child: CircleAvatar(
+                    //       radius: 38.0,
+                    //       child: ClipOval(
+                    //           // child: (_image != null)
+                    //           //     ? Image.file(_image!)
+                    //           //     : Image.asset('assets/user.png'),
 
-                              // child: (_image != null)
-                              // ? Image.file(_image)
-                              // : Image.asset('images/newimage.png'),
-                              ),
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                    ),
+                    //           // child: (_image != null)
+                    //           // ? Image.file(_image)
+                    //           // : Image.asset('images/newimage.png'),
+                    //           ),
+                    //       backgroundColor: Colors.white,
+                    //     ),
+                    //   ),
+                    // ),
+                    profilePicDrawer(),
                     SizedBox(
                       height: 5.0,
                     ),
@@ -142,19 +227,19 @@ class _DrawerClassState extends State<DrawerClass> {
                       child: StreamBuilder<QuerySnapshot>(
                         stream: getUserDetails(context).asBroadcastStream(),
                         builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (snapshot.hasError) {
-                            return Text(snapshot.error.toString() +
+                            AsyncSnapshot<QuerySnapshot> snapshot1) {
+                          if (snapshot1.hasError) {
+                            return Text(snapshot1.error.toString() +
                                 'Something went wrong');
                           }
 
-                          if (snapshot.connectionState ==
+                          if (snapshot1.connectionState ==
                               ConnectionState.waiting) {
                             return Text("Loading");
                           }
 
                           return ListView(
-                            children: snapshot.data!.docs
+                            children: snapshot1.data!.docs
                                 .map((DocumentSnapshot document) {
                               Map<String, dynamic> data =
                                   document.data()! as Map<String, dynamic>;

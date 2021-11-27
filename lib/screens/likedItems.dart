@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stop_shop/main.dart';
 import 'package:stop_shop/screens/drawer.dart';
+
 import 'package:stop_shop/screens/likeditemdetail.dart';
 import 'package:stop_shop/screens/product.dart';
-import 'package:stop_shop/screens/product_card.dart';
+import 'package:stop_shop/shared/product_card.dart';
 import 'package:stop_shop/screens/services/auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 

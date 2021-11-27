@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stop_shop/screens/drawer.dart';
 import 'package:stop_shop/screens/likedItems.dart';
-import 'package:stop_shop/screens/product_card.dart';
+import 'package:stop_shop/shared/product_card.dart';
 import 'package:stop_shop/screens/services/api.dart';
 
 import 'package:stop_shop/screens/services/auth.dart';
@@ -17,6 +17,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
+  final GlobalKey<ScaffoldState> _drawerscaffoldkey =
+      new GlobalKey<ScaffoldState>();
   List data = [{}];
   @override
   void initState() {
@@ -35,7 +37,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        endDrawer: DrawerClass(),
         appBar: AppBar(
           title: Text(
             "PRODUCTS",
@@ -58,66 +59,48 @@ class _HomeState extends State<Home> {
                 color: Colors.white,
               ),
             ),
+            //
             IconButton(
               onPressed: () {
-                // await _auth.signOut();
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text("Confirmation."),
-                        content: Text("Do you want to Sign Out"),
-                        actions: <Widget>[
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.grey),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text("Cancel"),
-                          ),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.black),
-                            ),
-                            onPressed: () async {
-                              await _auth.signOut();
-                              Navigator.pop(context);
-                            },
-                            child: Text("Sign Out"),
-                          ),
-                        ],
-                      );
-                    });
+                //on drawer menu pressed
+                if (_drawerscaffoldkey.currentState!.isDrawerOpen) {
+                  //if drawer is open, then close the drawer
+                  Navigator.pop(context);
+                } else {
+                  _drawerscaffoldkey.currentState!.openEndDrawer();
+                  //if drawer is closed then open the drawer.
+                }
               },
-              icon: Icon(
-                Icons.person,
-                color: Colors.white,
-              ),
-            ),
+              icon: Icon(Icons.menu),
+            ), // Set menu icon at leading of AppBar
           ],
         ),
-        body: Container(
-            padding: EdgeInsets.all(20.0),
-            child: data.isEmpty
-                ? Center(
-                    child: LinearProgressIndicator(
-                    color: Colors.black,
-                  ))
-                : new StaggeredGridView.countBuilder(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 4,
-                    itemCount: data.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        ProductCard(data: data[index]),
-                    staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-                    mainAxisSpacing: 20.0,
-                    crossAxisSpacing: 9.0,
-                  )),
+        body: Scaffold(
+          //second scaffold
+          key: _drawerscaffoldkey, //set gobal key defined above
+          endDrawer: DrawerClass(),
+          body: SingleChildScrollView(
+            child: Container(
+                padding: EdgeInsets.all(20.0),
+                child: data.isEmpty
+                    ? Center(
+                        child: LinearProgressIndicator(
+                        color: Colors.black,
+                      ))
+                    : new StaggeredGridView.countBuilder(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        crossAxisCount: 4,
+                        itemCount: data.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            ProductCard(data: data[index]),
+                        staggeredTileBuilder: (int index) =>
+                            StaggeredTile.fit(2),
+                        mainAxisSpacing: 20.0,
+                        crossAxisSpacing: 9.0,
+                      )),
+          ),
+        ),
       ),
     );
   }
