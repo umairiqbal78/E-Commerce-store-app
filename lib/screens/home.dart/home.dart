@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => likedItems()),
+                  MaterialPageRoute(builder: (context) => LikedItems()),
                 );
               },
               icon: Icon(

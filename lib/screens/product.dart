@@ -41,6 +41,8 @@ class _ProductState extends State<Product> {
   @override
   Widget build(BuildContext context) {
     CollectionReference user = FirebaseFirestore.instance.collection('user');
+    final GlobalKey<ScaffoldState> _drawerscaffoldkey =
+        new GlobalKey<ScaffoldState>();
 
     String uid() {
       return _auth.getUid;
@@ -114,43 +116,59 @@ class _ProductState extends State<Product> {
     }
 
     return SafeArea(
-      child: Scaffold(
-          endDrawer: DrawerClass(),
-          appBar: AppBar(
-            title: Text(
-              "PRODUCT DETAILS",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        child: Scaffold(
+      endDrawer: DrawerClass(),
+      appBar: AppBar(
+        title: Text(
+          "PRODUCT DETAILS",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        leading: BackButton(color: Colors.white),
+        backgroundColor: Colors.grey[900],
+        centerTitle: true,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LikedItems()),
+              );
+            },
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
             ),
-            leading: BackButton(color: Colors.white),
-            backgroundColor: Colors.grey[900],
-            centerTitle: true,
-            elevation: 0,
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => likedItems()),
-                  );
-                },
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  // await _auth.signOut();
-                  SignOutFunction();
-                },
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-              ),
-            ],
           ),
+          // IconButton(
+          //   onPressed: () {
+          //     // await _auth.signOut();
+          //     SignOutFunction();
+          //   },
+          //   icon: Icon(
+          //     Icons.person,
+          //     color: Colors.white,
+          //   ),
+          // ),
+          IconButton(
+            onPressed: () {
+              //on drawer menu pressed
+              if (_drawerscaffoldkey.currentState!.isDrawerOpen) {
+                //if drawer is open, then close the drawer
+                Navigator.pop(context);
+              } else {
+                _drawerscaffoldkey.currentState!.openEndDrawer();
+                //if drawer is closed then open the drawer.
+              }
+            },
+            icon: Icon(Icons.menu),
+          ), // Set menu icon at leading of AppBar
+        ],
+      ),
+      body: Scaffold(
+          //second scaffold
+          key: _drawerscaffoldkey, //set gobal key defined above
+          endDrawer: DrawerClass(),
           body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: SingleChildScrollView(
@@ -300,6 +318,6 @@ class _ProductState extends State<Product> {
               ),
             ),
           )),
-    );
+    ));
   }
 }

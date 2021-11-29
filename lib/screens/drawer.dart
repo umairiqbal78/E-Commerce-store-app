@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stop_shop/main.dart';
+import 'package:stop_shop/screens/contactme.dart';
 import 'package:stop_shop/screens/home.dart/home.dart';
 import 'package:stop_shop/screens/services/auth.dart';
 import 'package:image_picker/image_picker.dart';
@@ -70,6 +71,13 @@ class _DrawerClassState extends State<DrawerClass> {
     return Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Home()),
+    );
+  }
+
+  contactMe() {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ContactMe()),
     );
   }
 
@@ -310,6 +318,7 @@ class _DrawerClassState extends State<DrawerClass> {
                     fontSize: 18.0,
                     fontWeight: FontWeight.normal,
                     color: Colors.black)),
+            onTap: contactMe,
           ),
           Divider(
             thickness: 1.0,

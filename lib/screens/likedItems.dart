@@ -10,23 +10,63 @@ import 'package:stop_shop/shared/product_card.dart';
 import 'package:stop_shop/screens/services/auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class likedItems extends StatefulWidget {
+class LikedItems extends StatefulWidget {
   @override
-  _likedItemsState createState() => _likedItemsState();
+  _LikedItemsState createState() => _LikedItemsState();
 }
 
-class _likedItemsState extends State<likedItems> {
+class _LikedItemsState extends State<LikedItems> {
   final AuthService _auth = AuthService();
+  final GlobalKey<ScaffoldState> _drawerscaffoldkey =
+      new GlobalKey<ScaffoldState>();
   String? uid;
   void initState() {
     super.initState();
     uid = _auth.getUid;
   }
 
+  SignOutFunction() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Icon(Icons.send_to_mobile_sharp),
+            content: Text("Do you want to Sign Out"),
+            actions: <Widget>[
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.grey),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel"),
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.black),
+                ),
+                onPressed: () async {
+                  await _auth.signOut();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyApp()),
+                      (route) => false);
+                },
+                child: Text("Sign Out"),
+              ),
+            ],
+          );
+        });
+  }
+
   Stream<QuerySnapshot> getUserCartProducts(BuildContext context) async* {
     // final AuthService _auth = AuthService();
     final uid = await _auth.getUid;
-
+    final GlobalKey<ScaffoldState> _drawerscaffoldkey =
+        new GlobalKey<ScaffoldState>();
     yield* FirebaseFirestore.instance
         .collection('user')
         .doc(uid)
@@ -115,79 +155,93 @@ class _likedItemsState extends State<likedItems> {
     }
 
     return SafeArea(
-      child: Scaffold(
-          endDrawer: DrawerClass(),
-          appBar: AppBar(
-            title: Text(
-              "MY CART",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        child: Scaffold(
+      endDrawer: DrawerClass(),
+      appBar: AppBar(
+        title: Text(
+          "MY CART",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        leading: BackButton(color: Colors.white),
+        backgroundColor: Colors.grey[900],
+        centerTitle: true,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LikedItems()),
+              );
+            },
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
             ),
-            leading: BackButton(color: Colors.white),
-            backgroundColor: Colors.grey[900],
-            centerTitle: true,
-            elevation: 0,
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => likedItems()),
-                  );
-                },
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  // await _auth.signOut();
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Confirmation."),
-                          content: Text("Do you want to Sign Out"),
-                          actions: <Widget>[
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.grey),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Cancel"),
-                            ),
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.black),
-                              ),
-                              onPressed: () async {
-                                await _auth.signOut();
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MyApp()),
-                                    (route) => false);
-                              },
-                              child: Text("Sign Out"),
-                            ),
-                          ],
-                        );
-                      });
-                },
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-              ),
-            ],
           ),
+          IconButton(
+            onPressed: () {
+              //on drawer menu pressed
+              if (_drawerscaffoldkey.currentState!.isDrawerOpen) {
+                //if drawer is open, then close the drawer
+                Navigator.pop(context);
+              } else {
+                _drawerscaffoldkey.currentState!.openEndDrawer();
+                //if drawer is closed then open the drawer.
+              }
+            },
+            icon: Icon(Icons.menu),
+          ),
+          // IconButton(
+          //   onPressed: () {
+          //     // await _auth.signOut();
+          //     showDialog(
+          //         context: context,
+          //         builder: (BuildContext context) {
+          //           return AlertDialog(
+          //             title: Text("Confirmation."),
+          //             content: Text("Do you want to Sign Out"),
+          //             actions: <Widget>[
+          //               ElevatedButton(
+          //                 style: ButtonStyle(
+          //                   backgroundColor:
+          //                       MaterialStateProperty.all<Color>(Colors.grey),
+          //                 ),
+          //                 onPressed: () {
+          //                   Navigator.pop(context);
+          //                 },
+          //                 child: Text("Cancel"),
+          //               ),
+          //               ElevatedButton(
+          //                 style: ButtonStyle(
+          //                   backgroundColor:
+          //                       MaterialStateProperty.all<Color>(Colors.black),
+          //                 ),
+          //                 onPressed: () async {
+          //                   await _auth.signOut();
+          //                   Navigator.pushAndRemoveUntil(
+          //                       context,
+          //                       MaterialPageRoute(
+          //                           builder: (context) => MyApp()),
+          //                       (route) => false);
+          //                 },
+          //                 child: Text("Sign Out"),
+          //               ),
+          //             ],
+          //           );
+          //         });
+          //   },
+          //   icon: Icon(
+          //     Icons.person,
+          //     color: Colors.white,
+          //   ),
+          // ),
+        ],
+      ),
+      body: Scaffold(
+          //second scaffold
+          key: _drawerscaffoldkey, //set gobal key defined above
+          endDrawer: DrawerClass(),
           body: StreamBuilder<QuerySnapshot>(
             stream: getUserCartProducts(context),
             builder:
@@ -284,6 +338,6 @@ class _likedItemsState extends State<likedItems> {
               );
             },
           )),
-    );
+    ));
   }
 }
