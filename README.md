@@ -1,16 +1,13 @@
 # stop_shop
 
-A new Flutter project.
+An online Shopping store.
 
-## Getting Started
+## Description
 
-This project is a starting point for a Flutter application.
+A complete E-Commerce android Application (STOP SHOP) on Flutter using dart. UI and UX designed by me completly. This application have several screens. Splash Screen, Login/SignUp, Home Screen (Showing products), Product Screen (Gives detail about the product), Cart (User added cart items are there, with deletion functionality) and Contact Me Screen ( Personal Information for just better approach ). 
 
-A few resources to get you started if this is your first Flutter project:
+The products are taken from the bellow rest API.
+[Rest API for products](https://fakestoreapi.com/), which offers the product images, title, category, description, rating and price.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+###Firebase Services
+Used Firebase services for authentication of users for login and signUp. Firebase Cloud FireStore used to store data of user with following collections. user details, cart items, and profile picture. Cloud Storage is used to store the profile picture of user. 
