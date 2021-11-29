@@ -2,7 +2,7 @@
 
 An online Shopping store.
 
-## Description
+## Details about Project.
 
 A complete E-Commerce android Application (STOP SHOP) on Flutter using dart. UI and UX designed by me completly. This application have several screens. Splash Screen, Login/SignUp, Home Screen (Showing products), Product Screen (Gives detail about the product), Cart (User added cart items are there, with deletion functionality) and Contact Me Screen ( Personal Information for just better approach ). 
 
