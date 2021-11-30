@@ -12,3 +12,9 @@ The products are taken from the bellow rest API.
 ## Firebase Services
 
 Used Firebase services for authentication of users for login and signUp. Firebase Cloud FireStore used to store data of user with following collections. user details, cart items, and profile picture. Cloud Storage is used to store the profile picture of user. 
+
+## ScreenShots of screens
+https://drive.google.com/drive/folders/1mkHFtFcb7c4PT-AUbqun6P9oD0o5Piho?usp=sharing
+
+## .apk File
+https://drive.google.com/file/d/1rx2HGgK9hL4MXH5BYFiz-O3E0y8nO1zD/view?usp=sharing
