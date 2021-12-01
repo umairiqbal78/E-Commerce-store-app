@@ -140,16 +140,7 @@ class _ProductState extends State<Product> {
               color: Colors.white,
             ),
           ),
-          // IconButton(
-          //   onPressed: () {
-          //     // await _auth.signOut();
-          //     SignOutFunction();
-          //   },
-          //   icon: Icon(
-          //     Icons.person,
-          //     color: Colors.white,
-          //   ),
-          // ),
+
           IconButton(
             onPressed: () {
               //on drawer menu pressed

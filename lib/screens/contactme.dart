@@ -283,10 +283,7 @@ class _ContactMeState extends State<ContactMe> {
                                                     ),
                                                   ],
                                                 ),
-                                                // Divider(
-                                                //   color: Colors.black87,
-                                                //   thickness: 2.0,
-                                                // ),
+
                                                 Column(
                                                   children: [
                                                     Icon(
