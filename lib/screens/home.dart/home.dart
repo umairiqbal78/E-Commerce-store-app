@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stop_shop/screens/drawer.dart';
 import 'package:stop_shop/screens/likedItems.dart';
 import 'package:stop_shop/shared/product_card.dart';
 import 'package:stop_shop/screens/services/api.dart';
-
 import 'package:stop_shop/screens/services/auth.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -88,7 +84,7 @@ class _HomeState extends State<Home> {
                         color: Colors.black,
                       ))
                     : new StaggeredGridView.countBuilder(
-                        physics: AlwaysScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         crossAxisCount: 4,
                         itemCount: data.length,
